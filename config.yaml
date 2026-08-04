@@ -1,0 +1,188 @@
+
+
+dataset: mt_syn        # options: mt_syn, st_syn, parse2022, micro_ct
+mode: testing         # options: training, finetuning, testing
+
+
+dataroot: /mnt/md0/rajalakshmi/Unet_seg/validation_data/zarr/trainA/
+checkpoints_dir: /mnt/md0/rajalakshmi/Unet_seg/validation_data/checkpoints/ #not for testing
+
+# Needed only for finetuning
+pretrained_model_path: /mnt/md0/rajalakshmi/Unet_seg/experiments/random_crops_augments_50i_20c_1000c/exp2/checkpoints/unet_epoch_230.pth
+
+
+# Needed only for testing
+model_path: /mnt/md0/rajalakshmi/Unet_seg/validation_data/checkpoints/unet_epoch_200.pth
+output_dir: /mnt/md0/rajalakshmi/Unet_seg/validation_data/inference/
+
+
+common:
+  zarr_key: volumes/raw
+  train_mode: 3d
+  name: UNet_seg_radius_absvec
+
+  dataset_mode: random_crop_zarr
+  max_dataset_size: inf
+  serial_batches: true
+  batch_size: 1
+
+  display_freq: 10
+  display_ncols: 4
+  wandb_project_name: UNet_seg_radius_absvec
+
+  lambda_seg: 1.0
+  lambda_vec: 1.0
+
+
+modes:
+  training:
+    phase: train
+    isTrain: true
+    finetuning: false
+    num_threads: 50
+
+  finetuning:
+    phase: train
+    isTrain: true
+    finetuning: true
+    num_threads: 50
+
+  testing:
+    phase: test
+    isTrain: false
+    finetuning: false
+    num_threads: 32
+
+
+
+datasets:
+
+  mt_syn:
+    last_conv_batchnorm: true
+    use_wandb: true
+
+    augmentation_intensity_shift_enable: true
+    augmentation_intensity_shift_probability: 0.5
+    augmentation_intensity_shift_scale_range: [0.9, 1.1]
+    augmentation_intensity_shift_shift_range: [-0.1, 0.1]
+
+    augmentation_cropout_enable: true
+    augmentation_cropout_probability: 0.2
+    augmentation_cropout_high_intensity_threshold: 200
+    augmentation_mask_crop_num_cubes: 1000
+    augmentation_cropout_replacement_range: [50, 99]
+
+    training:
+      patch_size: 256
+      stride_A: 64
+      stride_B: 64
+      random_crop_dataset_length: 12
+      max_epochs: 50
+      learning_rate: 0.001
+      bce_pos_weight: null
+
+    testing:
+      patch_size: 256
+      stride_A: 16
+      stride_B: 16
+      min_component_size: 2
+
+
+  st_syn:
+    last_conv_batchnorm: false
+    use_wandb: false
+
+    augmentation_intensity_shift_enable: true
+    augmentation_intensity_shift_probability: 0.5
+    augmentation_intensity_shift_scale_range: [0.9, 1.1]
+    augmentation_intensity_shift_shift_range: [-0.1, 0.1]
+
+    augmentation_cropout_enable: false
+    augmentation_cropout_probability: 0.2
+    augmentation_cropout_high_intensity_threshold: 200
+    augmentation_mask_crop_num_cubes: 1000
+    augmentation_cropout_replacement_range: [50, 99]
+
+    training:
+      patch_size: 128
+      stride_A: 32
+      stride_B: 32
+      random_crop_dataset_length: 500
+      max_epochs: 600
+      learning_rate: 0.001
+      bce_pos_weight: 20.0
+
+    testing:
+      patch_size: 128
+      stride_A: 16
+      stride_B: 16
+      min_component_size: 10000
+
+
+  parse2022:
+    last_conv_batchnorm: false
+    use_wandb: false
+
+    augmentation_intensity_shift_enable: false
+    augmentation_intensity_shift_probability: 0.5
+    augmentation_intensity_shift_scale_range: [0.9, 1.1]
+    augmentation_intensity_shift_shift_range: [-0.1, 0.1]
+
+    augmentation_cropout_enable: false
+    augmentation_cropout_probability: 0.2
+    augmentation_cropout_high_intensity_threshold: 200
+    augmentation_mask_crop_num_cubes: 1000
+    augmentation_cropout_replacement_range: [50, 99]
+
+    training:
+      patch_size: 256
+      stride_A: 256
+      stride_B: 256
+      random_crop_dataset_length: 500
+      max_epochs: 400
+      learning_rate: 0.0001
+      bce_pos_weight: 20.0
+
+    testing:
+      patch_size: 256
+      stride_A: 64
+      stride_B: 64
+      min_component_size: 500
+
+
+  micro_ct:
+    last_conv_batchnorm: true
+    use_wandb: true
+
+    augmentation_intensity_shift_enable: false
+    augmentation_intensity_shift_probability: 0.5
+    augmentation_intensity_shift_scale_range: [0.9, 1.1]
+    augmentation_intensity_shift_shift_range: [-0.1, 0.1]
+
+    augmentation_cropout_enable: false
+    augmentation_cropout_probability: 0.2
+    augmentation_cropout_high_intensity_threshold: 200
+    augmentation_mask_crop_num_cubes: 1000
+    augmentation_cropout_replacement_range: [50, 99]
+
+
+    finetuning:
+      patch_size: 256
+      stride_A: 64
+      stride_B: 64
+      random_crop_dataset_length: 96
+      max_epochs: 200
+      learning_rate: 0.001
+      bce_pos_weight: null
+
+#    testing:
+#      patch_size: 256
+#      stride_A: 32
+#      stride_B: 32
+#      min_component_size: 2
+
+    testing:
+      patch_size: 64
+      stride_A: 16
+      stride_B: 16
+      min_component_size: 2

@@ -1,0 +1,33 @@
+dataset_type: "mt_syn"
+
+paths:
+  mask_folder: "/mnt/md0/rajalakshmi/Unet_seg/validation_data/GT/mask/"
+  centerline_folder: "/mnt/md0/rajalakshmi/Unet_seg/validation_data/GT/centerline/"
+  vtk_folder: "/mnt/md0/rajalakshmi/Unet_seg/validation_data/GT/vtk/"
+  swc_folder: "/home/rajalakshmi/Segmentation/md0/swcs/"
+  output_tif_folder: "/mnt/md0/rajalakshmi/Unet_seg/validation_data/trainB/"
+
+files:
+  mask_glob: "*.nii*"
+  centerline_extension: ".nii"
+  vtk_extension: ".vtk"
+  output_suffix: "_scale2.tif"
+
+processing_by_dataset:
+  mt_syn:
+    edge_search_radius: 100
+    step_size: 2
+    radius_divisor: 3.0
+    num_processes: "auto"
+
+  st_syn:
+    edge_search_radius: 50
+    step_size: 2
+    radius_divisor: 1.0
+    num_processes: "auto"
+
+  parse:
+    edge_search_radius: 100
+    step_size: 2
+    radius_divisor: 1.0
+    num_processes: "auto"

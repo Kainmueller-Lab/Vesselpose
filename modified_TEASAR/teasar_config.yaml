@@ -1,0 +1,35 @@
+dataset: mt_syn #choose here from below
+
+paths:
+  input_folder: /mnt/md0/rajalakshmi/Unet_seg/validation_data/inference/ #tiff format
+  base_output_dir: /mnt/md0/rajalakshmi/Unet_seg/validation_data/teasar/
+  roots_file: /home/rajalakshmi/Segmentation/vessel_seg_complete_pipeline/modified_TEASAr/roots.txt #it comes along with git pull
+
+datasets:
+  st_syn:
+    adaptive: true
+    scale: [0.7, 1.1]
+    spacing: [1, 1, 1]
+    const: [6, 10]
+    postprocess_simplify: false
+
+  mt_syn:
+    adaptive: true
+    scale: [0.3, 0.8]
+    spacing: [1, 1, 1]
+    const: [2, 7]
+    postprocess_simplify: true #true if u want to evaluate only with branch points
+
+  parse:
+    adaptive: false
+    scale: 1.1
+    spacing: [1, 1, 1]
+    const: 10
+    postprocess_simplify: false
+
+  micro_ct:
+    adaptive: false
+    scale: 1.1
+    spacing: [1, 1, 1]
+    const: 10
+    postprocess_simplify: false

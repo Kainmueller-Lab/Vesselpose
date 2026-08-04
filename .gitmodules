@@ -1,0 +1,3 @@
+[submodule "funlib.learn.torch"]
+	path = funlib.learn.torch
+	url = https://github.com/funkelab/funlib.learn.torch.git
